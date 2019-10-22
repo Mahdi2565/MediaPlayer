@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="2dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:padding="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/img_music"
+            android:src="@drawable/ic_launcher_background"
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
+
+        <TextView
+            android:id="@+id/title_music"
+            android:textColor="@color/titleMusic"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_toEndOf="@id/img_music"
+            android:text="@string/app_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/img_music"
+            android:layout_marginStart="16dp" />
+
+        <TextView
+            android:id="@+id/artist_music"
+            android:layout_below="@id/title_music"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_toEndOf="@id/img_music"
+            android:text="@string/app_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/img_music"
+            android:layout_marginStart="16dp" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>
