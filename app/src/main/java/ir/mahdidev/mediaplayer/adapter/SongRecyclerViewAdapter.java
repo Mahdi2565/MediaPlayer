@@ -33,10 +33,11 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
         this.context = context;
     }
 
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.song_items , parent, false));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.song_items, parent, false));
     }
 
     @Override
@@ -53,28 +54,31 @@ public class SongRecyclerViewAdapter extends RecyclerView.Adapter<SongRecyclerVi
         private ImageView coverMusic;
         private TextView titleMusic;
         private TextView artistMusic;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             coverMusic = itemView.findViewById(R.id.img_music);
             titleMusic = itemView.findViewById(R.id.title_music);
             artistMusic = itemView.findViewById(R.id.artist_music);
         }
-        public void onBind(MusicModel musicModel){
+
+        public void onBind(MusicModel musicModel) {
             titleMusic.setText(musicModel.getSongName());
             artistMusic.setText(musicModel.getArtist());
             coverMusic.setImageBitmap(getCoverImage(musicModel.getId()));
         }
-        private Bitmap getCoverImage(int id){
-            MediaMetadataRetriever mediaMetadata = new MediaMetadataRetriever();
-            mediaMetadata.setDataSource(Global.getContext().getApplicationContext() , getTrackUri(id));
-            byte [] imageByte = mediaMetadata.getEmbeddedPicture();
-            if (imageByte !=null)
-                return BitmapFactory.decodeByteArray(imageByte , 0 , imageByte.length);
-            else return BitmapFactory.decodeResource(context.getResources() , R.drawable.music_holder);
 
+        private Bitmap getCoverImage(int id) {
+            MediaMetadataRetriever mediaMetadata = new MediaMetadataRetriever();
+            mediaMetadata.setDataSource(Global.getContext().getApplicationContext(), getTrackUri(id));
+            byte[] imageByte = mediaMetadata.getEmbeddedPicture();
+            if (imageByte != null)
+                return BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);
+           else return null;
         }
-        private Uri getTrackUri (int id){
-            return ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI , id);
+
+        private Uri getTrackUri(int id) {
+            return ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id);
 
         }
     }

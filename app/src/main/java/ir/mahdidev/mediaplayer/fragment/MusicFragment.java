@@ -43,9 +43,7 @@ public class MusicFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (checkPermission()){
             musicList = repository.getMusicList();
-        }
     }
 
     public static MusicFragment newInstance() {
@@ -80,22 +78,6 @@ public class MusicFragment extends Fragment {
     }
 
 
-    private boolean checkPermission (){
-        if (Build.VERSION.SDK_INT<Build.VERSION_CODES.M) return true;
-        if (ActivityCompat.checkSelfPermission(getActivity() , Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(getActivity() , new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}
-                    , Const.REQUEST_READ_EXTERNAL_STORAGE_PERMISSION);
-            return false;
-        }else return true;
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-            if (requestCode == Const.REQUEST_READ_EXTERNAL_STORAGE_PERMISSION){
 
-            }
-        }else checkPermission();
-    }
 }

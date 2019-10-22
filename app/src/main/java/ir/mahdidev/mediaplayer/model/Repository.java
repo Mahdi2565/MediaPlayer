@@ -51,6 +51,35 @@ public class Repository {
         return musicList;
     }
 
+    public List<MusicModel> getMusicList(String mAlbumKey) {
+        musicList = new ArrayList<>();
+
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = {MediaStore.Audio.AudioColumns.TITLE
+                , MediaStore.Audio.AudioColumns.ALBUM,
+                MediaStore.Audio.AudioColumns.ARTIST,
+                MediaStore.Audio.AudioColumns.ALBUM_KEY,
+                MediaStore.Audio.AudioColumns._ID,
+                MediaStore.Audio.AudioColumns.YEAR
+        };
+        Cursor cursor = Global.getContext().getContentResolver().query(uri, projection
+                , MediaStore.Audio.AudioColumns.ALBUM_KEY + "=?", new String[]{mAlbumKey}, null);
+        while (cursor.moveToNext()) {
+            {
+                int musicId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns._ID));
+                int year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.YEAR));
+                String trackName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE));
+                String trackAlbum = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM));
+                String trackArtist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
+                String albumKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_KEY));
+                musicList.add(new MusicModel(musicId, year, trackName, trackAlbum, trackArtist, albumKey));
+            }
+        }
+        cursor.close();
+        return musicList;
+    }
+
+
     public List<AlbumModel> getAlbumList() {
         albumList = new ArrayList<>();
         Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
@@ -92,6 +121,5 @@ public class Repository {
         cursor.close();
         return artistList;
     }
-
 
 }
