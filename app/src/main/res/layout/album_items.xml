@@ -19,7 +19,7 @@
             android:layout_width="200dp"
             android:layout_height="200dp"/>
         <TextView
-            android:textColor="@color/titleAlbum"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
             android:padding="8dp"

@@ -1,6 +1,8 @@
 package ir.mahdidev.mediaplayer.model;
 
-public class MusicModel {
+import java.io.Serializable;
+
+public class MusicModel implements Serializable {
     private int id;
     private int year;
     private String songName;

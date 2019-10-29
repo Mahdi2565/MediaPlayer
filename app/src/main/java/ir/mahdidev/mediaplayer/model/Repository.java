@@ -103,7 +103,7 @@ public class Repository {
 
     public List<ArtistModel> getArtistList() {
         artistList = new ArrayList<>();
-        Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
+        Uri uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
         String[] projection = {
                 MediaStore.Audio.ArtistColumns.ARTIST
                 , MediaStore.Audio.ArtistColumns.ARTIST_KEY,

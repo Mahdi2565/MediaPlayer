@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
+    android:id="@+id/music_cardview"
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="2dp"
@@ -15,14 +16,15 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:scaleType="centerCrop"
             android:id="@+id/img_music"
-            android:src="@drawable/ic_launcher_background"
+            app:srcCompat="@drawable/ic_launcher_background"
             android:layout_width="80dp"
             android:layout_height="80dp"/>
 
         <TextView
             android:id="@+id/title_music"
-            android:textColor="@color/titleMusic"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginTop="8dp"

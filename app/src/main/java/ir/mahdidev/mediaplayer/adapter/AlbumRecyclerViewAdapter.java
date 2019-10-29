@@ -24,6 +24,7 @@ import ir.mahdidev.mediaplayer.model.AlbumModel;
 import ir.mahdidev.mediaplayer.model.MusicModel;
 import ir.mahdidev.mediaplayer.model.Repository;
 import ir.mahdidev.mediaplayer.utils.Global;
+import ir.mahdidev.mediaplayer.utils.PictureUtils;
 
 public class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumRecyclerViewAdapter.ViewHolder> {
 
@@ -66,23 +67,9 @@ public class AlbumRecyclerViewAdapter extends RecyclerView.Adapter<AlbumRecycler
         public void onBind(AlbumModel albumModel){
             albumName.setText(albumModel.getAlbumName());
             artistName.setText(albumModel.getArtistOfAlbum());
-            albumCover.setImageBitmap(getCoverImage(albumModel.getAlbumKey()));
+            albumCover.setImageBitmap(PictureUtils.getCoverImage(albumModel.getAlbumKey() , repository , context));
         }
 
-        private Bitmap getCoverImage(String albumKey){
-            List<MusicModel> musicList = repository.getMusicList(albumKey);
-            MediaMetadataRetriever mediaMetadata = new MediaMetadataRetriever();
-            mediaMetadata.setDataSource(Global.getContext().getApplicationContext() ,
-                    getTrackUri(musicList.get(0).getId()));
-            byte [] imageByte = mediaMetadata.getEmbeddedPicture();
-            if (imageByte !=null)
-                return BitmapFactory.decodeByteArray(imageByte , 0 , imageByte.length);
-           else return null;
 
-        }
-        private Uri getTrackUri (int id){
-            return ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI , id);
-
-        }
     }
 }

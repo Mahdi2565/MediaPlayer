@@ -1,6 +1,8 @@
 package ir.mahdidev.mediaplayer.model;
 
-public class ArtistModel {
+import java.io.Serializable;
+
+public class ArtistModel implements Serializable {
     private String artistName;
     private String artistKey;
     private int numberOfAlbum;

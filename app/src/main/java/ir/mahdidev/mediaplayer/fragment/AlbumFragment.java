@@ -14,19 +14,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.Serializable;
 import java.util.List;
 
 import ir.mahdidev.mediaplayer.R;
 import ir.mahdidev.mediaplayer.adapter.AlbumRecyclerViewAdapter;
 import ir.mahdidev.mediaplayer.model.AlbumModel;
 import ir.mahdidev.mediaplayer.model.Repository;
+import ir.mahdidev.mediaplayer.utils.Const;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AlbumFragment extends Fragment {
 
-    private Repository repository = Repository.getInstance();
     private List<AlbumModel> albumList ;
     private AlbumRecyclerViewAdapter albumRecyclerViewAdapter;
     private RecyclerView albumRecyclerView;
@@ -34,8 +35,9 @@ public class AlbumFragment extends Fragment {
     public AlbumFragment() {
     }
 
-    public static AlbumFragment newInstance() {
+    public static AlbumFragment newInstance(List<AlbumModel> albumModels) {
         Bundle args = new Bundle();
+        args.putSerializable(Const.ALBUM_LIST_BUNDLE , (Serializable) albumModels);
         AlbumFragment fragment = new AlbumFragment();
         fragment.setArguments(args);
         return fragment;
@@ -44,7 +46,9 @@ public class AlbumFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        albumList = repository.getAlbumList();
+        if (getArguments() !=null){
+            albumList = (List<AlbumModel>) getArguments().getSerializable(Const.ALBUM_LIST_BUNDLE );
+        }
     }
 
     @Override
