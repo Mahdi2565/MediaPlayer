@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -120,7 +121,35 @@ public class MainFragment extends Fragment {
             getMusicInformation();
             playPauseFunction();
             nextPreviousFunction();
+            shuffleMusicFunction();
+            repeatMusicFunction();
 
+    }
+
+    private void repeatMusicFunction() {
+        repeatMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (controller.isOneRepeat()){
+                    repeatMusic.setImageResource(R.drawable.repeat_all_music_ic);
+                }else repeatMusic.setImageResource(R.drawable.repeat_one_music_ic);
+                controller.repeatMusic();
+            }
+        });
+    }
+
+    private void shuffleMusicFunction() {
+        shuffleMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (controller.isShuffle()){
+                    DrawableCompat.setTint(shuffleMusic.getDrawable(), ContextCompat.getColor(getActivity(), R.color.white));
+                }else {
+                    DrawableCompat.setTint(shuffleMusic.getDrawable(), ContextCompat.getColor(getActivity(), R.color.orange));
+                }
+                controller.shuffleMusic();
+            }
+        });
     }
 
     private void nextPreviousFunction() {

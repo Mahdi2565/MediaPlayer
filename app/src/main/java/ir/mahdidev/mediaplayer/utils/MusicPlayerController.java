@@ -10,6 +10,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import ir.mahdidev.mediaplayer.EventBusMusicMessage;
 import ir.mahdidev.mediaplayer.model.MusicModel;
@@ -21,8 +22,12 @@ public class MusicPlayerController {
     private int CurrentPosition = 0 ;
     private int musicPosition = 0 ;
     private int newPostion ;
-    private EventBusMusicMessage eventBusMusicMessage;
+    private EventBusMusicMessage eventBusMusicMessage ;
+    private List<MusicModel> musicList = new ArrayList<>();
     private boolean isPause = false;
+    private boolean isShuffle = false;
+    private boolean isOneRepeat = false;
+    private boolean isAllRepeat = true ;
 
     public static MusicPlayerController getInstance(Context context){
         if (musicPlayerController == null){
@@ -50,6 +55,18 @@ public class MusicPlayerController {
         return isPause;
     }
 
+    public boolean isShuffle() {
+        return isShuffle;
+    }
+
+    public boolean isOneRepeat() {
+        return isOneRepeat;
+    }
+
+    public boolean isAllRepeat() {
+        return isAllRepeat;
+    }
+
     public void playMusic(final EventBusMusicMessage eventBusMusicMessage){
         if (mediaPlayer==null) mediaPlayer = new MediaPlayer();
         if (isPause){
@@ -59,7 +76,9 @@ public class MusicPlayerController {
                 mediaPlayer = new MediaPlayer();
         }
         this.eventBusMusicMessage = eventBusMusicMessage;
+        musicList.addAll(eventBusMusicMessage.getMusicModels());
         newPostion = eventBusMusicMessage.getPosition();
+
         Uri uri = PictureUtils.getTrackUri(eventBusMusicMessage.getMusicModel().getId());
         if (mediaPlayer.isPlaying()){
             mediaPlayer.stop();
@@ -77,39 +96,66 @@ public class MusicPlayerController {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
+                if (isAllRepeat){
+                    isOneRepeat = true;
+                }
                 nextMusic(mediaPlayer, eventBusMusicMessage );
+                isOneRepeat = false ;
             }
         });
     }
+
+    public void repeatMusic(){
+        if (isOneRepeat){
+            //mediaPlayer.setLooping(false);
+            isOneRepeat = false;
+        }else {
+           // mediaPlayer.setLooping(true);
+            isOneRepeat = true;
+        }
+    }
+
+    public void shuffleMusic() {
+        if (!isShuffle){
+            newPostion = new Random().nextInt((musicList.size() - 1) + 1);
+            isShuffle = true;
+        }else {
+            newPostion = eventBusMusicMessage.getPosition();
+            isShuffle = false;
+        }
+    }
+
+
+
     public void previousMusic(MediaPlayer mediaPlayer, EventBusMusicMessage eventBusMusicMessage){
-        newPostion = (--newPostion) % eventBusMusicMessage.getMusicModels().size();
-        if (newPostion<0) newPostion=eventBusMusicMessage.getMusicModels().size()-1;
+        newPostion = (--newPostion) % musicList.size();
+        if (newPostion<0) newPostion=musicList.size()-1;
         mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(context , PictureUtils
-                    .getTrackUri(getEventBusMusicMessage()
-                            .getMusicModels().get(newPostion).getId()));
+                    .getTrackUri(musicList.get(newPostion).getId()));
             mediaPlayer.prepare();
             mediaPlayer.start();
-            EventBus.getDefault().post(eventBusMusicMessage.getMusicModels().get(newPostion));
-            setEventBusMusicMessage(new EventBusMusicMessage(eventBusMusicMessage.getMusicModels().get(newPostion) , newPostion ,
-                    eventBusMusicMessage.getMusicModels()));
+            EventBus.getDefault().post(musicList.get(newPostion));
+            setEventBusMusicMessage(new EventBusMusicMessage(musicList.get(newPostion) , newPostion ,
+                    musicList));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     public void nextMusic(MediaPlayer mediaPlayer, EventBusMusicMessage eventBusMusicMessage ) {
-        newPostion = (++newPostion) % eventBusMusicMessage.getMusicModels().size();
+        if (!isOneRepeat){
+            newPostion = (++newPostion) % musicList.size();
+        }else newPostion = getEventBusMusicMessage().getPosition();
             mediaPlayer.reset();
             try {
                 mediaPlayer.setDataSource(context , PictureUtils
-                        .getTrackUri(getEventBusMusicMessage()
-                                .getMusicModels().get(newPostion).getId()));
+                        .getTrackUri(musicList.get(newPostion).getId()));
                 mediaPlayer.prepare();
                 mediaPlayer.start();
-                EventBus.getDefault().post(eventBusMusicMessage.getMusicModels().get(newPostion));
-                setEventBusMusicMessage(new EventBusMusicMessage(eventBusMusicMessage.getMusicModels().get(newPostion) , newPostion ,
-                        eventBusMusicMessage.getMusicModels()));
+                EventBus.getDefault().post(musicList.get(newPostion));
+                setEventBusMusicMessage(new EventBusMusicMessage(musicList.get(newPostion) , newPostion ,
+                        musicList));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -132,4 +178,5 @@ public class MusicPlayerController {
         musicPosition = mediaPlayer.getCurrentPosition();
         isPause = true;
     }
+
 }
