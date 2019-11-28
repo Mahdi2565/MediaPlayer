@@ -27,7 +27,7 @@ public class MusicPlayerController {
     private boolean isPause = false;
     private boolean isShuffle = false;
     private boolean isOneRepeat = false;
-    private boolean isAllRepeat = true ;
+    private boolean isAllRepeat = false ;
 
     public static MusicPlayerController getInstance(Context context){
         if (musicPlayerController == null){
@@ -63,6 +63,8 @@ public class MusicPlayerController {
         return isOneRepeat;
     }
 
+
+
     public boolean isAllRepeat() {
         return isAllRepeat;
     }
@@ -96,22 +98,18 @@ public class MusicPlayerController {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-                if (isAllRepeat){
-                    isOneRepeat = true;
-                }
                 nextMusic(mediaPlayer, eventBusMusicMessage );
-                isOneRepeat = false ;
             }
         });
     }
 
     public void repeatMusic(){
-        if (isOneRepeat){
-            //mediaPlayer.setLooping(false);
-            isOneRepeat = false;
+        if (isAllRepeat){
+            mediaPlayer.setLooping(false);
+            isAllRepeat = false;
         }else {
-           // mediaPlayer.setLooping(true);
-            isOneRepeat = true;
+           mediaPlayer.setLooping(true);
+            isAllRepeat = true;
         }
     }
 
@@ -131,6 +129,7 @@ public class MusicPlayerController {
         newPostion = (--newPostion) % musicList.size();
         if (newPostion<0) newPostion=musicList.size()-1;
         mediaPlayer.reset();
+        if (isAllRepeat)mediaPlayer.setLooping(true);
         try {
             mediaPlayer.setDataSource(context , PictureUtils
                     .getTrackUri(musicList.get(newPostion).getId()));
@@ -144,10 +143,9 @@ public class MusicPlayerController {
         }
     }
     public void nextMusic(MediaPlayer mediaPlayer, EventBusMusicMessage eventBusMusicMessage ) {
-        if (!isOneRepeat){
             newPostion = (++newPostion) % musicList.size();
-        }else newPostion = getEventBusMusicMessage().getPosition();
             mediaPlayer.reset();
+            if (isAllRepeat)mediaPlayer.setLooping(true);
             try {
                 mediaPlayer.setDataSource(context , PictureUtils
                         .getTrackUri(musicList.get(newPostion).getId()));

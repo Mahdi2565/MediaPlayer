@@ -53,6 +53,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
             <ImageView
+                android:padding="8dp"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:id="@+id/shuffle_music"
                 android:layout_margin="24dp"
                 android:layout_above="@id/music_controller"
@@ -63,6 +65,8 @@
                 android:layout_alignParentRight="true" />
 
             <ImageView
+                android:padding="8dp"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:id="@+id/repeat_music"
                 android:layout_margin="24dp"
                 android:layout_above="@id/music_controller"

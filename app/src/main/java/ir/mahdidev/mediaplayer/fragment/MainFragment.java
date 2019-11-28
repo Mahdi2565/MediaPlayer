@@ -3,6 +3,7 @@ package ir.mahdidev.mediaplayer.fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,16 +125,17 @@ public class MainFragment extends Fragment {
             nextPreviousFunction();
             shuffleMusicFunction();
             repeatMusicFunction();
-
     }
 
     private void repeatMusicFunction() {
         repeatMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (controller.isOneRepeat()){
-                    repeatMusic.setImageResource(R.drawable.repeat_all_music_ic);
-                }else repeatMusic.setImageResource(R.drawable.repeat_one_music_ic);
+                if (controller.isAllRepeat()){
+                    DrawableCompat.setTint(repeatMusic.getDrawable(), ContextCompat.getColor(getActivity(), R.color.white));
+                }else {
+                    DrawableCompat.setTint(repeatMusic.getDrawable(), ContextCompat.getColor(getActivity(), R.color.orange));
+                }
                 controller.repeatMusic();
             }
         });
@@ -295,8 +298,6 @@ public class MainFragment extends Fragment {
                 break;
             }
         }
-
-
     }
     @Subscribe
     public void onMusicReceived(EventBusMusicMessage eventBusMusicMessage){
@@ -383,6 +384,7 @@ public class MainFragment extends Fragment {
         fullCoverImage.setImageBitmap(PictureUtils.getCoverImage(musicModel.getId() , getContext()));
         playPauseMusic.setImageResource(R.drawable.ic_pause_icon);
         playPauseController.setImageResource(R.drawable.ic_pause_rounded_icon);
+        Log.e("TAG4" , "HERE");
     }
 
 
